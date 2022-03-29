@@ -1,6 +1,10 @@
 use crate::*;
 
-impl service::CommandService for Hget {
+use super::CommandService;
+
+/// 对 Command 的处理对象的收益
+
+impl CommandService for Hget {
     fn execute(self, store: &impl Storage) -> CommandResponse {
         match store.get(&self.table, &self.key) {
             Ok(Some(value)) => value.into(),
@@ -10,7 +14,7 @@ impl service::CommandService for Hget {
     }
 }
 
-impl service::CommandService for Hgetall {
+impl CommandService for Hgetall {
     fn execute(self, store: &impl Storage) -> CommandResponse {
         match store.get_all(&self.table) {
             Ok(kvs) => kvs.into(),
@@ -19,7 +23,7 @@ impl service::CommandService for Hgetall {
     }
 }
 
-impl service::CommandService for Hset {
+impl CommandService for Hset {
     fn execute(self, store: &impl Storage) -> CommandResponse {
         match self.pair {
             Some(pair) => match store.set(&self.table, pair.key, pair.value.unwrap_or_default()) {
@@ -35,7 +39,7 @@ impl service::CommandService for Hset {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{command_request::RequestData, service::CommandService};
+    use crate::command_request::RequestData;
 
     #[test]
     fn hset_should_work() {
