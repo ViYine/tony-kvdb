@@ -34,6 +34,66 @@ impl CommandRequest {
             })),
         }
     }
+
+    // 创建 Hdel 命令
+    pub fn new_hdel(table: impl Into<String>, key: impl Into<String>) -> Self {
+        Self {
+            request_data: Some(RequestData::Hdel(Hdel {
+                table: table.into(),
+                key: key.into(),
+            })),
+        }
+    }
+
+    // 创建 Hmdel 命令
+    pub fn new_hmdel(table: impl Into<String>, keys: Vec<String>) -> Self {
+        Self {
+            request_data: Some(RequestData::Hmdel(Hmdel {
+                table: table.into(),
+                keys,
+            })),
+        }
+    }
+
+    // 创建 Hmget 命令
+    pub fn new_hmget(table: impl Into<String>, keys: Vec<impl Into<String>>) -> Self {
+        Self {
+            request_data: Some(RequestData::Hmget(Hmget {
+                table: table.into(),
+                keys: keys.into_iter().map(|k| k.into()).collect(),
+            })),
+        }
+    }
+
+    // 创建 Hmset 命令
+    pub fn new_hmset(table: impl Into<String>, pairs: Vec<Kvpair>) -> Self {
+        Self {
+            request_data: Some(RequestData::Hmset(Hmset {
+                table: table.into(),
+                pairs,
+            })),
+        }
+    }
+
+    // 创建 Hexists 命令
+    pub fn new_hexists(table: impl Into<String>, key: impl Into<String>) -> Self {
+        Self {
+            request_data: Some(RequestData::Hexist(Hexist {
+                table: table.into(),
+                key: key.into(),
+            })),
+        }
+    }
+
+    // 创建 Hmexxists 命令
+    pub fn new_hmexists(table: impl Into<String>, keys: Vec<impl Into<String>>) -> Self {
+        Self {
+            request_data: Some(RequestData::Hmexist(Hmexist {
+                table: table.into(),
+                keys: keys.into_iter().map(|k| k.into()).collect(),
+            })),
+        }
+    }
 }
 
 impl Kvpair {
